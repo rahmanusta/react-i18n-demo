@@ -1,8 +1,8 @@
 == React.js ve Çok dillilik
 
-React.js ile çoklu dil desteği (internalization, i18n) olan uygulamalar geliştirmek için Yahoo tarafından geliştirilen React Intl projesini kullanabiliriz.
+React.js ile çoklu dil desteği (internalization, i18n) olan uygulamalar geliştirmek için https://github.com/yahoo/react-intl[React Intl] projesini kullanabiliriz. Yahoo tarafından geliştirilen *React Intl* projesini hem React.js web hem de React Native uygulamalarında kullanabililiriz.
 
-== React Intl kurulumu
+=== React Intl kurulumu
 
 React Intl kullanmaya başlamak için `react-intl` paketini `yarn` veya `npm` paket yöneticilerinden biriyle React.js projemize kurmalıyız.
 
@@ -17,11 +17,11 @@ npm install react-intl --save
 [React Intl] Missing locale data for locale: "tr". Using default locale: "en" as fallback.
 ////
 
-== React Intl kullanımı
+=== React Intl kullanımı
 
-React Intl hem deklaratif olarak React.js bileşenleri ile veya imperatif olarak JS API ile uygulamalarımızda kullanabiliriz. Bu yazıda deklaratif yolla ilerleyeceğiz.
+React Intl'i hem deklaratif yolla React.js bileşenleriyle veya imperatif olarak JS API ile uygulamalarımızda kullanabiliriz. Bu yazıda deklaratif yolla ilerleyeceğiz.
 
-Mevcut uygulamanıza çok dillilik özelliğini etkinleştirmek için `react-intl` paketinden `IntlProvider` bileşenini kullanmalıyız. Örneğin React.js projemizin kök eleman yapısı <<react-intl-oncesi>> gibi olsun diyelim. Kök elemanı `</IntlProvider>` ile sararak i18n için ilk adımı atmış oluruz. Bkz. <<react-intl-sonrasi>>
+Mevcut uygulamanıza çoklu dil desteği getirmek için `react-intl` içindeki `IntlProvider` bileşenini kullanmalıyız. Örneğin React.js projemizin kök eleman yapısı <<react-intl-oncesi>> gibi olsun diyelim. Kök elemanı `</IntlProvider>` ile sararak i18n için ilk adımı atmış oluruz. Bkz. <<react-intl-sonrasi>>
 
 [[react-intl-oncesi]]
 .React Intl öncesi
@@ -166,5 +166,9 @@ Uygulamanızın dil desteğine göre benzer şekilde metinlerinizi hazırlayabil
 | ja | こんにちは Rahman
 |==================== 
 
-Benden bu kadar. Görüşmek üzere.
+Buraya kadar anlatılanları bir React.js projesi olarak hazırladım ve sizlerle paylaşmak istiyorum.
 
+Demo: https://react-i18n.firebaseapp.com/ +
+Github: https://github.com/rahmanusta/react-i18n-demo
+
+Tekrar görüşmek dileğiyle.
