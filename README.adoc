@@ -1,0 +1,170 @@
+== React.js ve Çok dillilik
+
+React.js ile çoklu dil desteği (internalization, i18n) olan uygulamalar geliştirmek için Yahoo tarafından geliştirilen React Intl projesini kullanabiliriz.
+
+== React Intl kurulumu
+
+React Intl kullanmaya başlamak için `react-intl` paketini `yarn` veya `npm` paket yöneticilerinden biriyle React.js projemize kurmalıyız.
+
+[source,bash]
+----
+yarn add react-intl
+// veya
+npm install react-intl --save
+----
+
+////
+[React Intl] Missing locale data for locale: "tr". Using default locale: "en" as fallback.
+////
+
+== React Intl kullanımı
+
+React Intl hem deklaratif olarak React.js bileşenleri ile veya imperatif olarak JS API ile uygulamalarımızda kullanabiliriz. Bu yazıda deklaratif yolla ilerleyeceğiz.
+
+Mevcut uygulamanıza çok dillilik özelliğini etkinleştirmek için `react-intl` paketinden `IntlProvider` bileşenini kullanmalıyız. Örneğin React.js projemizin kök eleman yapısı <<react-intl-oncesi>> gibi olsun diyelim. Kök elemanı `</IntlProvider>` ile sararak i18n için ilk adımı atmış oluruz. Bkz. <<react-intl-sonrasi>>
+
+[[react-intl-oncesi]]
+.React Intl öncesi
+[source,html]
+----
+(<div>
+    <App/>
+</div>)
+----
+
+[[react-intl-sonrasi]]
+.React Intl sonrası
+[source,html]
+----
+import {IntlProvider} from "react-intl";
+
+(<IntlProvider locale={"tr"}>
+    <div>
+        <App/>
+    </div>
+</IntlProvider>)
+----
+
+`IntlProvider` locale adında bir props alanına sahiptir. String türünde dil kodunu atadığımızda, tüm alt elemanlarda ilgili dil erişilebilir olur.
+
+React Intl ile tarih, saat, para birimi, tekillik/çoğulluk, sayılar vb. dil bazında biçimlendirebileceğimiz gibi, dillere göre çıktılanacak metinleri yönetebiliriz. Bu tür işler için React Intl paketi içinde ``FormattedDate``, ``FormattedTime``, `FormattedNumber` ve `FormattedMessage` gibi bileşenler kullanılmaktadır.
+
+FormattedDate::
+
+Bir `Date` nesnesinden ilgili dile göre biçimlendirilmiş tarih çıktısı üretir.
+
+.FormattedDate örneği
+[width="100%",options="header",cols="3a,a,2a"]
+|==================== 
+| Kullanım | Dil | Çıktı 
+.3+<.^| `<FormattedDate value={new Date()}/>`
+| tr | 27.05.2017 
+| en | 5/27/2017
+| ja | 2017/5/27
+|====================
+
+https://github.com/yahoo/react-intl/wiki/Components#formatteddate
+
+FormattedTime::
+
+Bir `Date` nesnesinden ilgili dile göre biçimlendirilmiş saat çıktısı üretir.
+
+.FormattedTime örneği
+[width="100%",options="header",cols="3a,a,2a"]
+|==================== 
+| Kullanım | Dil | Çıktı 
+.3+<.^| `<FormattedTime value={new Date()}/>` 
+| tr | 15:34 
+| en | 3:34 PM
+| ja | 15:34
+|====================
+
+https://github.com/yahoo/react-intl/wiki/Components#formattedtime
+
+FormattedNumber::
+
+Bir sayısal veriden para birimi, kayan noktalı sayıları ve sayısal oran biçimlendirmeleri yapabiliriz.
+
+.FormattedNumber örneği
+[width="100%",options="header",cols="3a,a,2a"]
+|==================== 
+| Kullanım | Dil | Çıktı 
+.3+<.^|
+
+[source,xml]
+----
+<FormattedNumber value={1000}
+                   style="currency"
+                     currency="TRY"/> 
+----
+
+| tr | ₺1.000,00
+| en | TRY1,000.00
+| ja | TRY1,000.00
+|====================
+
+https://github.com/yahoo/react-intl/wiki/Components#formattednumber
+
+FormattedMessage::
+
+Dillere göre ayrılmış mesaj tanımlamalarını yönetir.
+
+Örneğin elimizde 3 farklı dil için oluşturulan bir mesaj nesnesi bulunsun.
+
+[source,js]
+----
+let langConfig = {
+    tr: {
+        "app.hello": "Merhaba {name}"
+    },
+    en: {
+        "app.hello": "Hello {name}"
+    },
+    ja: {
+        "app.hello": "こんにちは {name}"
+    }
+};
+----
+
+Uygulamanızın dil desteğine göre benzer şekilde metinlerinizi hazırlayabilirsiniz. Metinler eşsiz ``id``ler ile temsil edilmelidir. Örneğin yukarıdaki `app.hello` dil bazında tanımlanmış bir ``id``'dir. `id` herhangi bir metin olabilir fakat sonrasında uygulama içinde referans vereceğimizi unutmayalım. O yüzden anlamlı bir ismi olması tavsiye edilir.
+
+[source,xml]
+----
+<IntlProvider
+    locale={currentLocale} <1>
+    messages={currentMessages}> <2>
+        <div>
+          ...
+            
+            <FormattedMessage
+                id="app.hello" <3>
+                values={{name: "Rahman"}}/> <4>
+          ...
+        </div>
+</IntlProvider>        
+----
+<1> Aktif dil. **Örn**: *tr*
+<2> Aktif mesaj nesnesi. **Örn**: `{ "app.hello" : "こんにちは {name}" }`
+<3> `app.hello` isimli mesaj yüklenir
+<4> `{name}` yer tutucu doldurulur.
+
+.FormattedMessage çıktısı
+[width="100%",options="header",cols="3a,a,2a"]
+|==================== 
+| Kullanım | Dil | Çıktı 
+.3+<.^|
+
+[source,xml]
+----
+<FormattedMessage 
+        id="app.hello" 
+        values={{name: "Rahman"}}/>
+----
+
+| tr | Merhaba Rahman
+| en | Hello Rahman
+| ja | こんにちは Rahman
+|==================== 
+
+Benden bu kadar. Görüşmek üzere.
+
